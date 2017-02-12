@@ -6,9 +6,13 @@ namespace FileWatcher
 {
     class Program
     {
+
+        private static Networking networkClient;
+        private static Random random = new Random();
+
         static void Main(string[] args)
         {
-
+            networkClient = new Networking("http://www.fakeresponse.com/api");
             Run();
         }
 
@@ -35,7 +39,25 @@ namespace FileWatcher
             // Specify what is done when a file is changed, created, or deleted.
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
 
-            var trackedFile = new TrackedFile(e.FullPath);
+            var trackedFile = new PollingFileTracker(e.FullPath, 5000);
+
+            trackedFile.FilePolled += SendNetwork;
+        }
+
+        public static void SendNetwork(string fileInfo, object test)
+        {
+            Console.WriteLine($"Checking for file changes via timer... - {DateTime.UtcNow}");
+
+            var sleepTime = random.Next(0, 2) == 1 ? random.Next(0, 20) : 0;
+
+            Console.WriteLine($"Network timeout for {sleepTime} secs");
+            //Thread.Sleep(randTimeout);
+
+            networkClient.GetRequestAsync($"?data={{%22name%22:%22upload%22}}&sleep={sleepTime}&status=200")
+                                    .ContinueWith(callback =>
+                                    {
+                                        Console.WriteLine($"Completed historical upload.");
+                                    });
         }
 
     }
