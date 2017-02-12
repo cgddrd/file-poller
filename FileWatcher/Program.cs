@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Permissions;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace FileWatcher
 {
@@ -30,8 +25,8 @@ namespace FileWatcher
             watcher.EnableRaisingEvents = true;
 
             // Wait for the user to quit the program.
-            Console.WriteLine("Press \'q\' to quit the sample.");
-            while (Console.Read() != 'q') ;
+            Console.WriteLine("Press \'q\' to quit the application.");
+            while (Console.Read() != 'q');
 
         }
 
